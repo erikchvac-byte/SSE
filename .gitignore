@@ -3,6 +3,9 @@
 .env.local
 *.key
 
+# Claude Code per-user settings
+.claude/settings.local.json
+
 # Godot
 godot_project/.godot/
 godot_project/android/

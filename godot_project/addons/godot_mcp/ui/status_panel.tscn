@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://liwbrskx0lh7"]
 
-[ext_resource type="Script" path="res://addons/godot_mcp/ui/status_panel.gd" id="1"]
+[ext_resource type="Script" uid="uid://bty317lblaxly" path="res://addons/godot_mcp/ui/status_panel.gd" id="1"]
 
-[node name="MCPStatusPanel" type="VBoxContainer"]
+[node name="MCPStatusPanel" type="VBoxContainer" unique_id=1663162543]
 offset_right = 600.0
 offset_bottom = 300.0
 script = ExtResource("1")

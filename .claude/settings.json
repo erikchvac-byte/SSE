@@ -1,46 +1,4 @@
 {
-  "mcpServers": {
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "C:/Users/erikc/Dev/SSE"
-      ]
-    },
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@github/github-mcp-server"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "REDACTED_GITHUB_PAT"
-      }
-    },
-    "suno": {
-      "command": "mcp-suno",
-      "env": {
-        "SUNO_API_KEY": "PENDING"
-      }
-    },
-    "pixellab": {
-      "command": "npx",
-      "args": ["-y", "pixellab-mcp"],
-      "env": {
-        "PIXELLAB_API_KEY": "REDACTED_PIXELLAB_KEY"
-      }
-    },
-    "godot-mcp-pro": {
-      "command": "node",
-      "args": ["C:/Users/erikc/Downloads/godot-mcp-pro-v1.7.0/server/build/index.js"],
-      "env": {
-        "GODOT_MCP_PORT": "6505"
-      }
-    },
-    "audio-tweaker": {
-      "command": "npx",
-      "args": ["PENDING — install mcp-audio-tweaker"],
-      "note": "Experimental — FFmpeg is authoritative fallback"
-    }
-  },
   "permissions": {
     "allow": [
       "Bash(git *)",
