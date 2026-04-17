@@ -26,10 +26,9 @@ func _ready() -> void:
 
 
 func update_player_position(world_pos: Vector2) -> void:
-	var tile := Vector2i(
-		int(world_pos.x) / source_tile_size,
-		int(world_pos.y) / source_tile_size,
-	)
+	# Vector2i(Vector2) truncates toward zero; the float divide + cast
+	# keeps the math readable and avoids GDScript's integer-division warning.
+	var tile := Vector2i(world_pos / float(source_tile_size))
 	var moved := not _player_tile_valid or tile != _player_tile
 	var newly_revealed := not _explored.has(tile)
 	_player_tile = tile
