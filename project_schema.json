@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "project": "Untitled 90s Suburban Sim",
+    "godot_version": "4.6.2",
+    "era": "1997-2000",
+    "setting": "suburban USA"
+  },
+  "art": {
+    "tile_size": 16,
+    "base_resolution": { "width": 320, "height": 180 },
+    "display_scale": 4,
+    "display_resolution": { "width": 1280, "height": 720 },
+    "pixel_scale": "1px = 1 world unit",
+    "pixellab_config": {
+      "style_prompt_prefix": "16x16 pixel art, 1990s suburban USA aesthetic, flat colors, limited palette, retro game style",
+      "palette_name": "suburban_90s",
+      "palette_colors": [
+        "#1a1a2e", "#16213e", "#4a4a5a", "#6b6b7b",
+        "#9b9bab", "#c4c4c4", "#e8e8e8", "#ffffff",
+        "#5c3d2e", "#8b6347", "#c4956a", "#e8c99a",
+        "#2d5a27", "#4a8a3f", "#7ab870", "#b8e0a8",
+        "#1e3a5f", "#2e6da4", "#5b9bd5", "#a8d1f5",
+        "#8b2020", "#c43030", "#e85050", "#f5a0a0",
+        "#6b4c11", "#a07828", "#d4a84b", "#f0d080",
+        "#3d1a6e", "#6b3aa0", "#9b6ad0", "#c8a8f0"
+      ],
+      "max_colors": 32,
+      "animation_fps": 8,
+      "character_directions": 4
+    },
+    "sprite_sizes": {
+      "character": { "width": 16, "height": 24 },
+      "vehicle_small": { "width": 32, "height": 16 },
+      "vehicle_large": { "width": 48, "height": 24 },
+      "building_tile": { "width": 16, "height": 16 },
+      "prop_small": { "width": 8, "height": 8 },
+      "prop_medium": { "width": 16, "height": 16 },
+      "prop_large": { "width": 32, "height": 32 },
+      "ui_icon": { "width": 16, "height": 16 }
+    }
+  },
+  "audio": {
+    "music_format": "ogg",
+    "sfx_format": "wav",
+    "sample_rate": 44100,
+    "normalization_target_lufs": -14,
+    "music_bitrate": "192k",
+    "suno_config": {
+      "style_prompt_prefix": "1990s suburban americana, lo-fi, nostalgic, warm,",
+      "genres": ["soft rock", "pop", "ambient", "funk", "jazz"],
+      "tempo_range": "60-120 bpm",
+      "mood": "nostalgic, warm, everyday life"
+    },
+    "ffmpeg_convert_to_ogg": "ffmpeg -i {input} -c:a libvorbis -q:a 4 -ar 44100 {output}",
+    "ffmpeg_convert_to_wav": "ffmpeg -i {input} -c:a pcm_s16le -ar 44100 {output}",
+    "ffmpeg_normalize": "ffmpeg -i {input} -af loudnorm=I=-14:TP=-1.5:LRA=11 {output}"
+  },
+  "scenes": {
+    "naming_convention": "snake_case",
+    "root_node_type": "Node2D",
+    "layer_names": {
+      "0": "ground",
+      "1": "decorations",
+      "2": "structures",
+      "3": "objects",
+      "4": "characters",
+      "5": "vehicles",
+      "6": "ui"
+    },
+    "collision_layers": {
+      "1": "world_static",
+      "2": "characters",
+      "3": "vehicles",
+      "4": "interactables",
+      "5": "triggers"
+    }
+  },
+  "tiled": {
+    "export_format": "tmj",
+    "tile_size": 16,
+    "layer_naming": "must match scenes.layer_names",
+    "object_types": ["spawn_point", "trigger", "npc_path", "vehicle_path"]
+  },
+  "git": {
+    "lfs_patterns": ["*.png", "*.jpg", "*.ogg", "*.wav", "*.mp3", "*.import", "*.tres", "*.res"],
+    "commit_message_format": "type(scope): description",
+    "commit_types": ["feat", "fix", "asset", "audio", "scene", "script", "config", "docs"]
+  },
+  "paths": {
+    "sprites": "godot_project/assets/sprites/",
+    "audio_music": "godot_project/assets/audio/music/",
+    "audio_sfx": "godot_project/assets/audio/sfx/",
+    "tilesets": "godot_project/assets/tilesets/",
+    "scenes": "godot_project/scenes/",
+    "scripts": "godot_project/scripts/",
+    "tiled_maps": "tiled_maps/",
+    "exports": "exports/"
+  }
+}

@@ -1,0 +1,20 @@
+# Environment / credentials
+.env
+.env.local
+*.key
+
+# Godot
+godot_project/.godot/
+godot_project/android/
+godot_project/ios/
+
+# Exports
+exports/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
