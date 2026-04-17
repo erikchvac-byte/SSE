@@ -97,13 +97,59 @@ where every request is decomposed into atomic MCP-executable tasks before execut
 - May need custom PixelLab prompt templates per asset category
 - Evaluate MCP Audio Tweaker stability after first use
 
+## ADR-008: GDD.md as Canonical Design Authority
+**Status**: Accepted
+**Date**: 2026-04-17
+**Context**: Design decisions were scattered across CLAUDE.md, ADR.md, and the original pipeline PDF. Contradictions emerged (tile size 16 vs 32, viewport 320x180 vs 640x360, Tiled .tmj vs .tmx). No single source of truth for game design existed.
+**Decision**: `GDD.md` at project root is canonical for all design decisions. CLAUDE.md and ADR.md reference it. On conflict, GDD.md wins and other files are updated to sync.
+**Rationale**: Design decisions decay quickly without a single authoritative doc. Splitting rules from design lets CLAUDE.md stay short (~40 lines) while GDD grows.
+**Consequences**: Every design change must update GDD.md. Stale GDD = stale everything.
+
+## ADR-009: 32x32 Tiles and 640x360 Viewport (Supersedes ADR-004 Specs)
+**Status**: Accepted
+**Date**: 2026-04-17
+**Context**: Original specs (16x16 tiles, 320x180) were inferred early. Design session locked 32x32 per PDF and Stardew readability reference; viewport must show enough tiles for map comprehension at 32x32 scale.
+**Decision**: Tile size 32x32px. Viewport 640x360 (×2 pixel-perfect = 1280x720). ~20x11 tiles visible on screen. Always-on minimap with fog-of-war is a UI requirement for scope visibility beyond viewport.
+**Rationale**: 32x32 matches PDF spec, Stardew reference, and PixelLab native tile output. 640x360 is the smallest viewport that gives enough on-screen tiles for open-world readability.
+**Consequences**: All asset generation and PixelLab prompts must enforce 32x32. Minimap is a Phase 1+ UI requirement, not optional. `project.godot` updated this session.
+**Testing**: `project.godot` viewport values updated. Will verify visually once first scene is loaded.
+
+## ADR-010: Dual-Register Terminology System
+**Status**: Accepted
+**Date**: 2026-04-17
+**Context**: Game tone shifted from "Catcher in the Rye vibes" to "Catcher × Severance ambient dystopia." Needed a concrete mechanic, not just atmosphere.
+**Decision**: Every concept has two names. Surface vocabulary ("mom," "school," "home") used in casual NPC speech. Institutional vocabulary ("assigned custodian," "Reeducation Facility," "assigned domicile") used in paperwork, signage, PA systems, official forms. Full mapping table in `GDD.md` §3.
+**Rationale**: The dissonance between the two registers IS the horror. Matches Severance reference exactly. Unlike a pure Orwellian setting, this creates a cognitive gap the player slowly notices.
+**Consequences**: All asset text (signs, paperwork, HUD) and all NPC dialogue must be written to register. Writing cost increases slightly. Pays off in cohesion.
+
+## ADR-011: Self-Awareness Stat as UI Reveal Mechanic
+**Status**: Accepted
+**Date**: 2026-04-17
+**Context**: Player decided the protagonist "slowly wakes up" to the dystopia rather than knowing from frame one. Needed a mechanical implementation that wasn't just a narrative flag.
+**Decision**: The `self_awareness` stat (0–100) gates what UI colors and institutional vocabulary are visible to the player. Low awareness = only environment colors + surface vocabulary visible. High awareness = UI colors (CRT green, amber, magenta) appear on in-world signage and HUD; institutional vocabulary replaces surface vocabulary in labels.
+**Rationale**: Makes the awakening arc a literal, visible mechanic rather than implied narrative. Every stat gain is visible feedback. Ties character creation choices (which set starting self-awareness) directly to starting visual experience.
+**Consequences**: Requires a shader layer that gates color visibility based on stat. UI text rendering must swap between surface and institutional strings dynamically. More complex than a static UI but a core aesthetic feature.
+
+## ADR-012: 10-Color Palette System with Set Separation
+**Status**: Accepted
+**Date**: 2026-04-17
+**Context**: Palette lock needed before first PixelLab call. User proposed a 10-color system with hard separation between environment and UI color sets; specific hex values needed retuning to fit the uncanny-suburb tone rather than cartoon-bright.
+**Decision**: 5 ENVIRONMENT + 3 UI + 1 BRIDGE + 1 GLOBAL BASE. Full spec in `palette.md`. Environment set tuned hyperreal-uncanny (1997 suburb slightly too vivid). UI set tuned 1997-CRT-computer with one "glitch" magenta. Hard separation enforced in sprite generation; bleed controlled by shader tied to self-awareness (ADR-011).
+**Rationale**: Color separation is the central aesthetic mechanic. The per-screen budget (3–5 env, 1–2 ui) forces disciplined scenes. PixelLab prompt template in `palette.md` §5 enforces the lock per generation call.
+**Consequences**: Every PixelLab call must include the palette-lock prompt block. Palette values stored in `res://resources/palette.tres` (TBD) so scripts/shaders reference by name, not hex. Adding new colors later requires ADR update + GDD update + palette.md version bump.
+
 ## Key Files
-- `CLAUDE.md` — session instructions
-- `notes.md` — current state and credentials status
-- `project_schema.json` — locked asset generation config
-- `.claude/settings.json` — MCP server configurations
+- `CLAUDE.md` — session instructions (lightweight, points at GDD)
+- `GDD.md` — **canonical design doc** (all game design decisions)
+- `palette.md` — **canonical palette spec** (PixelLab enforcement, awakening-arc reveal rules)
+- `notes.md` — current state, MCP status, credentials
+- `ADR.md` — this file, architectural decisions
+- `document_pdf.pdf` — original design session PDF (reference only)
+- `.claude/settings.json` — legacy project MCP config (INERT — Claude Code reads from ~/.claude.json)
+- `~/.claude.json` — actual MCP server config (user-level)
 - `.gitattributes` — Git LFS patterns
 - `godot_project/project.godot` — Godot project root
 
 ## Change Log
 - 2026-04-16: Project scaffolded. All dependencies installed except Godot MCP Pro, PixelLab, Suno credentials.
+- 2026-04-17: Session 002. MCP servers migrated to ~/.claude.json (project config was inert). Godot MCP Pro connected live. Drafted GDD v0.1 from design interview. Dystopian reframe (v0.2) — dual-register terminology, Reeducation Facility replaces school, custodians replace parents, minimap-with-fog locked. Palette v1.0 locked (`palette.md`). ADR-008 through ADR-012 added. Viewport updated to 640x360 in `project.godot`. Home68.tscn placeholder removed.

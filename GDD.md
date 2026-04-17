@@ -31,7 +31,7 @@ You start normalized. As your stats shift, the illusion begins to crack. There i
 | Sprite size | 32×32 (characters match tile grid) |
 | Region | Fictional generic American suburb compound (no specific state) |
 | Register | Ambient dystopia — surface cheery, institutional channels reveal rot |
-| Palette | TBD — see §11 Known Gaps |
+| Palette | Locked — see `palette.md` (10-color system: 5 env + 3 ui + bridge + base) |
 
 ---
 
@@ -188,8 +188,7 @@ Later phases expand to full sector → compound → distant zones. No full-compo
 
 Design decisions deferred to later sessions. Flagged so they're visible, not ignored.
 
-- **Palette specifics** — exact color values; style range (limited/open)
-- **Self-awareness → HUD reveal mechanics** — exact thresholds, what flips (signage text, NPC dialogue, stat labels, etc.)
+- **Self-awareness → dialogue/vocabulary reveal mechanics** — exact thresholds for when NPC dialogue and stat labels switch register (palette reveal thresholds are now locked in `palette.md` §3)
 - **Creation → stats mapping formula** — exact deltas per variable choice, including starting self-awareness
 - **"Compound Standing" options** — the social-placement creation variable
 - **Additional creation variables** — do we add more? (ethnicity, appearance, pet, school grade, etc.)
@@ -210,3 +209,4 @@ Design decisions deferred to later sessions. Flagged so they're visible, not ign
 
 - **2026-04-16 — v0.1**: Initial draft from design interview. Resolved contradictions: tile size (32×32 locked), viewport (640×360), Tiled format (.tmj), Godot MCP Pro-only. Established character creation mechanic, stat system, time model, Phase 1 scope.
 - **2026-04-17 — v0.2**: Dystopian reframe. Added dual-register terminology (§3). Renamed "school" to Reeducation Facility throughout. Custodians replace parents, youth-unit replaces child/teen. Added always-on fog-of-war minimap requirement. Tone reference shifted from Catcher-only to Catcher × Severance (ambient dystopia, slowly revealed). Self-awareness stat doubles as "wake-up meter" controlling how much institutional vocabulary is visible in the UI. Creation variables renamed to official/institutional labels.
+- **2026-04-17 — v0.2.1**: Palette locked. 10-color system (5 env + 3 ui + bridge + base) with awakening-arc reveal mechanics — full spec in `palette.md`. Closed the "Palette specifics" known gap.

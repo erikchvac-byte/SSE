@@ -42,9 +42,10 @@ MCP servers are registered in `~/.claude.json` (NOT project `.claude/settings.js
 4. [ ] Decide on palette (GDD §11 gap) before first PixelLab asset call
 
 ## Design Documents
-- **`GDD.md`** — canonical design doc, v0.2 (dystopian reframe). ALL design decisions live here.
+- **`GDD.md`** — canonical design doc, v0.2.1 (dystopian reframe + palette locked). ALL design decisions live here.
+- **`palette.md`** — canonical palette spec, v1.0. 10-color system; self-awareness gates UI reveal. PixelLab prompt templates included.
 - **`CLAUDE.md`** — session instructions. Points at GDD.md for design.
-- **`ADR.md`** — architectural decision log. Out of date on some items (e.g., tile size) — needs sync pass.
+- **`ADR.md`** — architectural decision log. Aligned with GDD as of Session 002 (ADR-008 through ADR-012 added).
 - **`document_pdf.pdf`** — original pipeline/design session doc from prior session.
 
 ## Credentials Storage
@@ -59,15 +60,16 @@ MCP servers are registered in `~/.claude.json` (NOT project `.claude/settings.js
 - Uncommitted: many changes staged from this and prior session
 
 ## Known Issues
-- `ADR.md` has stale specs (16×16 tiles, 320×180 viewport, `.tmj` path references project_schema.json that doesn't exist) — needs alignment pass with GDD v0.2
-- `project_schema.json` referenced in ADR-004 doesn't exist. Palette/asset config lives in GDD §2 and §11 instead.
+- `project_schema.json` referenced in ADR-004 doesn't exist. Palette/asset config now lives in `palette.md` and `GDD.md`. ADR-004 kept for history but is effectively superseded by ADR-012.
 - The 4 unique NPCs (Loyalist/Rival/Burnout/Authority per GDD §9.1) have no names, designs, or dialogue yet.
+- GitHub PAT exposure: both an old and current PAT are in `.claude/settings.json` working tree and prior git history (commit 960fa44). PixelLab key also in working tree. Remediation deferred per user — must be done before first push.
 
-## What's Next
+## What's Next (Phase 1 Build)
 Per GDD Phase 1 scope (§10): **assigned domicile + yard + adjacent sector street.**
 
-Immediate next steps (do not execute without user confirmation):
-1. Delete placeholder `Home68.tscn`
-2. Create first real scene — likely the youth-unit's bedroom as the Phase 1 starting room
-3. Build basic tileset for interior (floor/wall/door) — PixelLab call needs palette locked first
-4. Player controller (CharacterBody2D, 4-direction movement)
+Immediate next steps:
+1. Create `res://resources/palette.tres` — named Color exports for the 10 palette values
+2. First scene — the youth-unit's bedroom (interior). Starting location.
+3. First tileset via PixelLab using `palette.md` §5 prompt template — interior floor/wall/door
+4. Player controller (CharacterBody2D, 4-direction movement, 32x32 collision)
+5. Always-on minimap UI skeleton (GDD §10, empty/fog-only for now)

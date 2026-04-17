@@ -15,6 +15,12 @@ config/description="A 2D top-down open-world sim. Ambient dystopia in a 1997 Ame
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/sprites/ui/icon.png"
 
+[autoload]
+
+MCPScreenshot="*res://addons/godot_mcp/mcp_screenshot_service.gd"
+MCPInputService="*res://addons/godot_mcp/mcp_input_service.gd"
+MCPGameInspector="*res://addons/godot_mcp/mcp_game_inspector_service.gd"
+
 [display]
 
 window/size/viewport_width=640
