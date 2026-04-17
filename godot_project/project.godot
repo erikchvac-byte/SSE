@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Untitled 90s Suburban Sim"
 config/description="A 2D top-down open-world sim. Ambient dystopia in a 1997 American suburb. See GDD.md for canonical design."
+run/main_scene="res://scenes/world/bedroom.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/sprites/ui/icon.png"
 
