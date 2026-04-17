@@ -11,10 +11,13 @@ extends CharacterBody2D
 
 signal moved(world_pos: Vector2)
 
+@onready var _camera: Camera2D = $Camera2D
+
 
 func _ready() -> void:
 	if palette == null:
 		palette = load("res://resources/palette.tres") as Palette
+	_camera.make_current()
 	queue_redraw()
 
 
