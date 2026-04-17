@@ -1,6 +1,6 @@
 # Game Design Document — Untitled 90s Suburban Sim
 
-**Version**: 0.2 (dystopian reframe — 2026-04-17)
+**Version**: 0.2.2 (dystopian reframe — 2026-04-17)
 **Status**: Draft — pending review and redlines
 **Canonical reference**: This document supersedes prior guesses in `CLAUDE.md` and `ADR.md` where they conflict. Flagged contradictions resolved below.
 
@@ -150,7 +150,41 @@ The 4 unique archetypes, reread through the dystopian frame:
 | Burnout | Withdrawn / defiant peer | A youth-unit the system has already broken — cautionary tale or ally? |
 | Authority | Teacher / principal / adult | Compliance officer / Reeducation Facility staff |
 
-Names, designs, relationship angles TBD — §11.
+### 9.1.1 The 4 Unique NPCs
+
+Palette references use the `Palette` resource names (see `palette.md` + `res://resources/palette.tres`). Bridge/UI colors appear on a sprite only at or above the awareness threshold noted.
+
+#### Ashley Pritchard — "The Loyalist"
+- **Institutional label**: Compliance Subject #0041
+- **Age / read**: 16. Cheerful, punctual, volunteers as hall monitor, pins Reeducation Facility merit badges to her backpack. Uses the institutional vocabulary casually *without noticing*.
+- **Palette**: acid_cream polo + warm_ochre skirt, sky_cool_highlight headband, deep_shadow outline. Merit-badge pins render as signal_purple — visible at awareness ≥ 26.
+- **Dialogue register**: Institutional vocabulary in casual speech ("Did you turn in your Household Evaluation?"). Low-awareness reads this as pep; high-awareness reads this as the voice of the compound in a teen's body.
+- **Core horror**: she is genuinely happy. She isn't performing — the compound has built her.
+- **Relationship vector**: the surface-friend who keeps nudging the youth-unit toward compliance. Every act of resistance costs standing with her.
+
+#### Tyler Brandt — "The Rival"
+- **Institutional label**: Compliance Subject #0119
+- **Age / read**: 17. Sharp-elbowed, tracks everyone's Compliance Assessment scores, trades answer keys. Plays the system because he's winning it.
+- **Palette**: acid_cream polo (rumpled), warm_ochre chinos, sky_cool_highlight varsity jacket. Jacket patch has signal_purple stitching — visible at awareness ≥ 26, resolves into a compound insignia at ≥ 51.
+- **Dialogue register**: Surface vocabulary in public, institutional vocabulary when alone with the player ("my Standing dropped two points this week — you don't want my Standing, trust me"). He sees the compound clearly and has opted in.
+- **Core horror**: he knows. He chose to dominate rather than escape.
+- **Relationship vector**: hostile ally of convenience. Will help the youth-unit if it raises his own Standing relative to someone else.
+
+#### Jess Halloran — "The Burnout"
+- **Institutional label**: Compliance Subject #0237 — **FLAGGED**
+- **Age / read**: 17. Smokes behind the Reeducation Facility loading dock. Hoodie up, headphones with no music, three consecutive skipped Compliance Assessments on file. Custodians speak about her in lowered voices.
+- **Palette**: deep_shadow hoodie, warm_ochre wash jeans, deep_shadow boots. Hand-drawn glitch_magenta mark on the inside of her wrist — visible only at awareness ≥ 76.
+- **Dialogue register**: the *only* NPC who uses institutional vocabulary deliberately, with sarcasm as resistance ("You going to your reeducation today? They can flag me again"). Low-awareness players hear bitterness; high-awareness players hear the first honest voice in the compound.
+- **Core horror**: the system already knows her file is flagged. She knows they know. She's decided it doesn't matter.
+- **Relationship vector**: ally potential that unlocks slowly — meaningful dialogue only at awareness ≥ 50. She is the mirror that tells the youth-unit they are beginning to see.
+
+#### Mr. Gary Caldwell — "The Authority"
+- **Institutional label**: Compliance Officer / Grade 11 Assessor
+- **Age / read**: mid-40s. The friendly teacher. Coaches JV track in his off-hours. Softens bad news with a smile. Says things like "I just want what's best for you kids."
+- **Palette**: acid_cream short-sleeve dress shirt, warm_ochre tie, warm_ochre khakis, deep_shadow loafers and frames. Tie pattern resolves into repeating signal_purple compound insignia at awareness ≥ 51. At ≥ 76, his voice over the PA briefly distorts into a flat compliance-officer cadence.
+- **Dialogue register**: dual-use sentences — every line parses two ways. "You'll thank me later, I promise." "We just want to make sure everyone has the tools to succeed." Never breaks the surface register out loud. His paperwork, hall-pass slips, and PA announcements use the full institutional vocabulary.
+- **Core horror**: he is sincerely kind. The apparatus operates through him. He believes in it.
+- **Relationship vector**: gatekeeper. Controls attendance flags, hall passes, referrals. Non-hostile in every moment, consequential in every record.
 
 ### 9.2 Schedule / Behavior
 TBD — Phase 4 concern. For Phase 1 we place static positioned NPCs.
@@ -193,7 +227,6 @@ Design decisions deferred to later sessions. Flagged so they're visible, not ign
 - **"Compound Standing" options** — the social-placement creation variable
 - **Additional creation variables** — do we add more? (ethnicity, appearance, pet, school grade, etc.)
 - **Stat drift mechanics** — specific inputs that push each of the 6 stats up or down
-- **4 unique NPCs** — names, designs, dialogue register (how each leaks dystopia)
 - **Scrip source** — allowance, Reeducation Facility reward, black market, none?
 - **Reeducation Facility interior detail** — visible classes or time-skip only
 - **Map geography** — specific domicile layout, street layout, neighbor placement
@@ -210,3 +243,4 @@ Design decisions deferred to later sessions. Flagged so they're visible, not ign
 - **2026-04-16 — v0.1**: Initial draft from design interview. Resolved contradictions: tile size (32×32 locked), viewport (640×360), Tiled format (.tmj), Godot MCP Pro-only. Established character creation mechanic, stat system, time model, Phase 1 scope.
 - **2026-04-17 — v0.2**: Dystopian reframe. Added dual-register terminology (§3). Renamed "school" to Reeducation Facility throughout. Custodians replace parents, youth-unit replaces child/teen. Added always-on fog-of-war minimap requirement. Tone reference shifted from Catcher-only to Catcher × Severance (ambient dystopia, slowly revealed). Self-awareness stat doubles as "wake-up meter" controlling how much institutional vocabulary is visible in the UI. Creation variables renamed to official/institutional labels.
 - **2026-04-17 — v0.2.1**: Palette locked. 10-color system (5 env + 3 ui + bridge + base) with awakening-arc reveal mechanics — full spec in `palette.md`. Closed the "Palette specifics" known gap.
+- **2026-04-17 — v0.2.2**: 4 unique NPCs designed. Ashley Pritchard (Loyalist), Tyler Brandt (Rival), Jess Halloran (Burnout), Mr. Gary Caldwell (Authority). Each with names, institutional labels, palette assignments tied to awakening-arc reveal thresholds, dialogue register, core horror, and relationship vector. Added GDD §9.1.1. Closed the "4 unique NPCs" known gap.

@@ -3,7 +3,7 @@
 **Current state only.** If an item here is no longer true, delete it — do not annotate or archive. Decisions live in `ADR.md`. Open work lives in GitHub Issues (github.com/erikchvac-byte/SSE/issues).
 
 ## Phase
-Pre-Phase-1 — GDD v0.2 drafted, repo public, no scenes built yet.
+Phase 1 scaffold in place — GDD v0.2.2, palette resource + minimap UI + bedroom scaffold scene + placeholder player. No real sprites yet; all visuals are palette-colored rects via _draw().
 
 ## Environment
 - OS: Windows 11
@@ -34,9 +34,9 @@ Authoritative config: `~/.claude.json`. Project `.claude/settings.json` has no `
 - Main scene: not set
 
 ## Design Documents
-- `GDD.md` — canonical design (v0.2.1)
+- `GDD.md` — canonical design (v0.2.2)
 - `palette.md` — canonical palette (v1.0)
-- `ADR.md` — immutable architectural decisions
+- `ADR.md` — immutable architectural decisions (15)
 - `CLAUDE.md` — session protocol
 - `document_pdf.pdf` — original design reference
 
