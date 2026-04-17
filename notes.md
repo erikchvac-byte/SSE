@@ -18,19 +18,26 @@
 | MCP | Installed | Credentials | Ready |
 |---|---|---|---|
 | Filesystem MCP | YES (npx) | N/A | YES |
-| GitHub MCP | YES (npx) | PENDING — need GitHub PAT | NO |
+| GitHub MCP | YES (npx) | YES — PAT configured | YES ⚠️ regenerate PAT |
 | Suno MCP | YES (pip) | PENDING — need Suno API key | NO |
-| PixelLab MCP | NOT YET | PENDING — need PixelLab API key | NO |
-| Godot MCP Pro | NOT YET — purchase required ($5 itch.io) | N/A | NO |
-| MCP Audio Tweaker | NOT YET | N/A | NO |
+| PixelLab MCP | YES (npx) | YES — key configured | YES |
+| Godot MCP Pro | YES — v1.7.0 built | N/A | YES (needs editor open) |
+| MCP Audio Tweaker | NOT YET | N/A | NO — FFmpeg is fallback |
+
+## Godot MCP Pro
+- Location: C:/Users/erikc/Downloads/godot-mcp-pro-v1.7.0/
+- Server: C:/Users/erikc/Downloads/godot-mcp-pro-v1.7.0/server/build/index.js
+- Plugin: copied to godot_project/addons/godot_mcp/
+- Port: 6505
+- REQUIRED: Open Godot editor and enable plugin before any MCP calls
+  - Project → Project Settings → Plugins → Godot MCP Pro → Enable
 
 ## Pending Manual Steps
-1. [ ] Purchase Godot MCP Pro — itch.io, search "Godot MCP Pro" by youichi-uda ($5)
-2. [ ] Get PixelLab API key — pixellab.ai → sign up → API settings
-3. [ ] Get Suno API credentials — suno.ai → account → API access
-4. [ ] Get GitHub Personal Access Token — github.com → Settings → Developer settings → PAT
-5. [ ] Install Godot Tiled Importer plugin — after Godot project first open
-6. [ ] Install MCP Audio Tweaker — npm install after Godot MCP Pro setup
+1. [ ] Open Godot, enable Godot MCP Pro plugin (Project → Project Settings → Plugins)
+2. [ ] Get Suno API key — suno.ai → account → API access
+3. [ ] Install Godot Tiled Importer plugin — after Godot project first open
+4. [ ] Install MCP Audio Tweaker — optional, FFmpeg covers this
+5. [!] Regenerate GitHub PAT — was exposed in conversation history
 
 ## Credentials Storage
 - Store all API keys in `.env` (gitignored)

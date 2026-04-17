@@ -12,30 +12,32 @@
       "command": "npx",
       "args": ["-y", "@github/github-mcp-server"],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "PENDING — add to .env"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "REDACTED_GITHUB_PAT"
       }
     },
     "suno": {
       "command": "mcp-suno",
       "env": {
-        "SUNO_API_KEY": "PENDING — add to .env"
+        "SUNO_API_KEY": "PENDING"
       }
     },
     "pixellab": {
       "command": "npx",
       "args": ["-y", "pixellab-mcp"],
       "env": {
-        "PIXELLAB_API_KEY": "PENDING — add to .env"
+        "PIXELLAB_API_KEY": "REDACTED_PIXELLAB_KEY"
       }
     },
     "godot-mcp-pro": {
       "command": "node",
-      "args": ["PENDING — set path after Godot MCP Pro purchase and install"],
-      "note": "Purchase at itch.io — search Godot MCP Pro by youichi-uda ($5). Requires Godot editor open on port 6505."
+      "args": ["C:/Users/erikc/Downloads/godot-mcp-pro-v1.7.0/server/build/index.js"],
+      "env": {
+        "GODOT_MCP_PORT": "6505"
+      }
     },
     "audio-tweaker": {
       "command": "npx",
-      "args": ["PENDING — install mcp-audio-tweaker after Godot MCP Pro setup"],
+      "args": ["PENDING — install mcp-audio-tweaker"],
       "note": "Experimental — FFmpeg is authoritative fallback"
     }
   },
