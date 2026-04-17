@@ -1,8 +1,8 @@
 # SSE Project Notes
 
 ## Current State
-**Last Updated**: 2026-04-16
-**Phase**: Project scaffolded — awaiting MCP credential setup
+**Last Updated**: 2026-04-17
+**Phase**: Pre-Phase-1 — GDD v0.2 drafted, project ready, no scenes built yet.
 
 ## Environment
 - OS: Windows 11
@@ -15,44 +15,59 @@
 - mcp-suno: 2026.4.8.4 (pip installed)
 
 ## MCP Status
-| MCP | Installed | Credentials | Ready |
-|---|---|---|---|
-| Filesystem MCP | YES (npx) | N/A | YES |
-| GitHub MCP | YES (npx) | YES — PAT configured | YES ⚠️ regenerate PAT |
-| Suno MCP | YES (pip) | PENDING — need Suno API key | NO |
-| PixelLab MCP | YES (npx) | YES — key configured | YES |
-| Godot MCP Pro | YES — v1.7.0 built | N/A | YES (needs editor open) |
-| MCP Audio Tweaker | NOT YET | N/A | NO — FFmpeg is fallback |
+MCP servers are registered in `~/.claude.json` (NOT project `.claude/settings.json` — Claude Code only loads MCPs from user config).
 
-## Godot MCP Pro
-- Location: C:/Users/erikc/Downloads/godot-mcp-pro-v1.7.0/
-- Server: C:/Users/erikc/Downloads/godot-mcp-pro-v1.7.0/server/build/index.js
-- Plugin: copied to godot_project/addons/godot_mcp/
-- Port: 6505
-- REQUIRED: Open Godot editor and enable plugin before any MCP calls
-  - Project → Project Settings → Plugins → Godot MCP Pro → Enable
+| MCP | Status | Notes |
+|---|---|---|
+| Filesystem MCP | LIVE | scope: `C:/Users/erikc/Dev/SSE` |
+| Godot MCP Pro | LIVE | v1.7.0 bridge, v1.6.0 plugin, WebSocket port 6505, editor connected |
+| PixelLab MCP | LIVE | key configured in user config |
+| GitHub MCP | NOT LOADED | PAT was exposed — regenerate before re-adding |
+| Suno MCP | NOT LOADED | no API key yet — add when we hit Phase 7 |
+| FFmpeg | LIVE | authoritative audio converter, in PATH |
+| MCP Audio Tweaker | REMOVED | FFmpeg is authoritative per GDD §11 |
+
+## Godot Editor
+- Editor: OPEN with SSE project loaded
+- Project: "Untitled 90s Suburban Sim"
+- Viewport: 640×360 (updated this session from 320×180)
+- Plugin: Godot MCP Pro enabled, autoloads registered
+- Current open scene: `res://Home68.tscn` (placeholder — slated for deletion)
+- Main scene: NOT SET
 
 ## Pending Manual Steps
-1. [ ] Open Godot, enable Godot MCP Pro plugin (Project → Project Settings → Plugins)
-2. [ ] Get Suno API key — suno.ai → account → API access
-3. [ ] Install Godot Tiled Importer plugin — after Godot project first open
-4. [ ] Install MCP Audio Tweaker — optional, FFmpeg covers this
-5. [!] Regenerate GitHub PAT — was exposed in conversation history
+1. [!] **Regenerate GitHub PAT** at https://github.com/settings/tokens — was exposed in prior conversation
+2. [ ] Install Godot Tiled Importer plugin (needed when we start Tiled map work)
+3. [ ] Get Suno API key when we reach Phase 7 (audio)
+4. [ ] Decide on palette (GDD §11 gap) before first PixelLab asset call
+
+## Design Documents
+- **`GDD.md`** — canonical design doc, v0.2 (dystopian reframe). ALL design decisions live here.
+- **`CLAUDE.md`** — session instructions. Points at GDD.md for design.
+- **`ADR.md`** — architectural decision log. Out of date on some items (e.g., tile size) — needs sync pass.
+- **`document_pdf.pdf`** — original pipeline/design session doc from prior session.
 
 ## Credentials Storage
-- Store all API keys in `.env` (gitignored)
-- Never commit credentials to GitHub
+- Project-level `.claude/settings.json` mcpServers section is INERT — Claude Code ignores it.
+- All credentials in `~/.claude.json` (user config). Gitignored by default (outside project).
+- Never commit credentials to GitHub.
 
 ## Git
-- Repo: NOT YET INITIALIZED — pending GitHub PAT
-- LFS patterns configured in .gitattributes
-- Remote: TBD
-
-## Godot Project
-- Path: C:/Users/erikc/Dev/SSE/godot_project/
-- Version: 4.6.2
-- Status: project.godot created, not yet opened in editor
+- Repo: initialized locally
+- LFS patterns configured in `.gitattributes`
+- Remote: none configured (pending PAT regeneration)
+- Uncommitted: many changes staged from this and prior session
 
 ## Known Issues
-- MCP Audio Tweaker is pre-release (0 official releases) — FFmpeg is the authoritative fallback
-- Godot MCP Pro requires editor to be open before any MCP calls
+- `ADR.md` has stale specs (16×16 tiles, 320×180 viewport, `.tmj` path references project_schema.json that doesn't exist) — needs alignment pass with GDD v0.2
+- `project_schema.json` referenced in ADR-004 doesn't exist. Palette/asset config lives in GDD §2 and §11 instead.
+- The 4 unique NPCs (Loyalist/Rival/Burnout/Authority per GDD §9.1) have no names, designs, or dialogue yet.
+
+## What's Next
+Per GDD Phase 1 scope (§10): **assigned domicile + yard + adjacent sector street.**
+
+Immediate next steps (do not execute without user confirmation):
+1. Delete placeholder `Home68.tscn`
+2. Create first real scene — likely the youth-unit's bedroom as the Phase 1 starting room
+3. Build basic tileset for interior (floor/wall/door) — PixelLab call needs palette locked first
+4. Player controller (CharacterBody2D, 4-direction movement)

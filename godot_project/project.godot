@@ -11,33 +11,21 @@ config_version=5
 [application]
 
 config/name="Untitled 90s Suburban Sim"
-config/description="A 2D top-down sandbox set in 1997-2000 suburban America."
+config/description="A 2D top-down open-world sim. Ambient dystopia in a 1997 American suburb. See GDD.md for canonical design."
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/sprites/ui/icon.png"
 
 [display]
 
-window/size/viewport_width=320
-window/size/viewport_height=180
-window/size/initial_screen=0
+window/size/viewport_width=640
+window/size/viewport_height=360
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
 
-[rendering]
+[editor_plugins]
 
-textures/canvas_textures/default_texture_filter=0
-
-[physics]
-
-2d/default_gravity=0
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
 
 [layer_names]
-
-2d_physics/layer_1="world_static"
-2d_physics/layer_2="characters"
-2d_physics/layer_3="vehicles"
-2d_physics/layer_4="interactables"
-2d_physics/layer_5="triggers"
 
 2d_render/layer_1="ground"
 2d_render/layer_2="decorations"
@@ -46,3 +34,16 @@ textures/canvas_textures/default_texture_filter=0
 2d_render/layer_5="characters"
 2d_render/layer_6="vehicles"
 2d_render/layer_7="ui"
+2d_physics/layer_1="world_static"
+2d_physics/layer_2="characters"
+2d_physics/layer_3="vehicles"
+2d_physics/layer_4="interactables"
+2d_physics/layer_5="triggers"
+
+[physics]
+
+2d/default_gravity=0
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
