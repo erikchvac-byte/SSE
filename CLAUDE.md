@@ -2,8 +2,10 @@
 
 ## Session Start — ALWAYS DO THIS FIRST
 Read in order:
-1. `notes.md` — current MCP status, credentials, pending tasks, deployment state
-2. `GDD.md` — canonical game design document (locked decisions, known gaps)
+1. `notes.md` — current state (repo, MCP, env)
+2. `GDD.md` — canonical game design document
+3. `ADR.md` — frozen architectural decisions (skim to orient)
+4. Open GitHub Issues at github.com/erikchvac-byte/SSE/issues — current open work
 
 ## Project Overview
 2D top-down open-world sim. Ambient dystopia in a fictional 1997 American suburb compound.
@@ -50,11 +52,27 @@ Human directs → Claude decomposes into atomic MCP tasks → MCPs execute.
 - NEVER push to GitHub without explicit user approval
 - Always present proposed changes and wait for approval on destructive operations
 
+## Records Discipline (ADR-013)
+Each concern has exactly one home. Do not duplicate across files.
+
+| File | Purpose | Mutability |
+|---|---|---|
+| `notes.md` | Current state only | Mutable. **Delete stale items, do not annotate them.** No "Known Issues", "Pending", "Change Log", or "What's Next" sections — those belong elsewhere. |
+| `ADR.md` | Architectural decisions | Immutable. To change a decision, append a new ADR that supersedes the old. Never edit a prior entry. |
+| `Sessions/*.md` (Obsidian vault) | Behavioral log | Append-only. One file per session. |
+| GitHub Issues | Open work | External. Close when done. |
+
+When a task is resolved: delete it from `notes.md`, close its GitHub Issue, done. No archival, no struck-through lines, no "moved to X" breadcrumbs.
+
+## Obsidian Vault Rule
+The Obsidian vault at `C:\Users\erikc\Desktop\DesktopFolder\MeNew\SSE\` is reference + behavioral log, not canonical. Before reading or writing any file there, **announce what I'm opening and what I see** — check gate to avoid confusion with repo-side canonical files.
+
 ## After Any Session With Changes
-- Update `notes.md` → Current State section
-- Update `ADR.md` if architectural decisions were made
-- Write a new session log in `C:\Users\erikc\Desktop\DesktopFolder\MeNew\SSE\Sessions\`
+- Prune `notes.md` — delete resolved items, update current state in place
+- Add new ADRs to `ADR.md` only if architectural decisions were made (no edits to prior ADRs)
+- Write a new session log in the Obsidian vault `Sessions/` folder
   - Filename: `Session NNN - YYYY-MM-DD.md`
   - Log what the user **did** — actions, decisions, missteps, friction points
-  - This is behavioral research, not a changelog — capture the process
+  - Behavioral research, not a changelog — capture the process
+- File any new open work as GitHub Issues
 - Commit before /compact

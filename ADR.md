@@ -5,6 +5,10 @@
 Claude Code orchestrates all build actions through MCP tools. Human-in-the-loop pipeline
 where every request is decomposed into atomic MCP-executable tasks before execution.
 
+**This file is immutable.** Each ADR below is a frozen record of a decision at a point in time.
+To change a decision, append a new ADR that supersedes the old — do not edit prior entries.
+Current state lives in `notes.md`. Open work lives in GitHub Issues.
+
 ## ADR-001: Godot 4 as Game Engine
 **Status**: Accepted
 **Date**: 2026-04-16
@@ -28,30 +32,29 @@ where every request is decomposed into atomic MCP-executable tasks before execut
 **Decision**: All file writes route through Filesystem MCP exclusively.
 **Rationale**: Prevents concurrent write conflicts, provides a single audit trail, enforces path conventions.
 **Consequences**: Slightly more steps per operation. All MCPs must hand off outputs to Filesystem MCP rather than writing directly where possible.
-**Note**: Two CVEs disclosed (CVE-2025-53109, CVE-2025-53110) — local-only pipeline, low risk. Pin version.
 
 ## ADR-004: Shared Project Schema for Asset Consistency
-**Status**: Accepted
+**Status**: Superseded by ADR-012
 **Date**: 2026-04-16
 **Context**: PixelLab generates non-deterministic outputs. Without locked parameters, art style will diverge across sessions.
 **Decision**: All asset generation calls use locked config from `project_schema.json` (palette, pixel scale, tile size, style prefix).
 **Rationale**: Ensures visual coherence across all AI-generated assets across sessions and tools.
 **Consequences**: Requires discipline to always reference schema before calling PixelLab. Schema changes require retroactive asset updates.
+**Note**: `project_schema.json` was not created. Canonical asset config now lives in `palette.md` and `GDD.md` per ADR-012.
 
 ## ADR-005: Audio Pipeline with FFmpeg Fallback
-**Status**: Accepted
+**Status**: Superseded by change log entry 2026-04-17 (MCP Audio Tweaker removed; FFmpeg authoritative)
 **Date**: 2026-04-16
 **Context**: Suno outputs MP3. Godot requires OGG (streaming music) and WAV (sfx). MCP Audio Tweaker handles conversion but is pre-release.
 **Decision**: Primary path = MCP Audio Tweaker. Fallback = direct FFmpeg call. FFmpeg is authoritative.
 **Rationale**: MCP Audio Tweaker is convenient but experimental. FFmpeg is stable and already installed.
 **Consequences**: Must verify MCP Audio Tweaker on each session before relying on it. Always have FFmpeg command ready.
-**FFmpeg command**: `ffmpeg -i input.mp3 -c:a libvorbis -q:a 4 output.ogg`
 
 ## ADR-006: Git LFS for Binary Assets
 **Status**: Accepted
 **Date**: 2026-04-16
 **Context**: Sprites, audio, and Godot binary files will bloat standard Git history rapidly.
-**Decision**: Git LFS for all binary asset types (see .gitattributes).
+**Decision**: Git LFS for all binary asset types (see `.gitattributes`).
 **Rationale**: Keeps repo size manageable, standard practice for game projects.
 **Consequences**: Requires Git LFS initialized on all contributor machines. LFS bandwidth costs on GitHub for large projects.
 
@@ -59,43 +62,9 @@ where every request is decomposed into atomic MCP-executable tasks before execut
 **Status**: Accepted
 **Date**: 2026-04-16
 **Context**: Structural level layout benefits from a dedicated visual tool. Godot's built-in tilemap editor is sufficient but Tiled offers better workflow for large world design.
-**Decision**: Tiled for structural layout only. Exports as .tmj. Godot Tiled Importer bridges to Godot.
-**Rationale**: Tiled provides superior world-building UX for large maps. .tmj (JSON) format is human-readable and git-diffable.
+**Decision**: Tiled for structural layout only. Exports as `.tmj`. Godot Tiled Importer bridges to Godot.
+**Rationale**: Tiled provides superior world-building UX for large maps. `.tmj` (JSON) format is human-readable and git-diffable.
 **Consequences**: Requires Godot Tiled Importer plugin installed and configured. Tile size and layer naming must match schema exactly.
-
-## Technical Constraints
-- Godot 4.4+ required (Godot MCP Pro hard requirement)
-- Node.js 18+ required (Godot MCP Pro server)
-- Godot editor must be open for any Godot MCP Pro calls
-- All pixel art: 16x16px tiles, locked palette
-- Audio: OGG for music, WAV for sfx, -14 LUFS normalized
-
-## Testing Results
-- Godot 4.6.2: installed and verified ✅
-- FFmpeg 8.1: installed and verified ✅
-- Node.js v24.13.0: verified ✅
-- Python 3.13.5: verified ✅
-- Git LFS 3.7.0: verified ✅
-- mcp-suno 2026.4.8.4: installed ✅
-- Godot MCP Pro: PENDING purchase
-- PixelLab MCP: PENDING API key
-- MCP Audio Tweaker: PENDING install
-
-## Known Issues
-- Godot MCP Pro not yet purchased/installed
-- PixelLab and Suno credentials not yet obtained
-- MCP Audio Tweaker experimental — FFmpeg is fallback
-- GitHub remote not yet configured
-
-## Open Questions
-- Which Suno MCP implementation is most stable? (mcp-suno via AceDataCloud selected — verify)
-- Will PixelLab style anchoring be sufficient for full game consistency?
-- Tiled Importer plugin — which version is compatible with Godot 4.6.2?
-
-## Future Considerations
-- Consider Git LFS bandwidth costs if asset library grows large
-- May need custom PixelLab prompt templates per asset category
-- Evaluate MCP Audio Tweaker stability after first use
 
 ## ADR-008: GDD.md as Canonical Design Authority
 **Status**: Accepted
@@ -112,7 +81,6 @@ where every request is decomposed into atomic MCP-executable tasks before execut
 **Decision**: Tile size 32x32px. Viewport 640x360 (×2 pixel-perfect = 1280x720). ~20x11 tiles visible on screen. Always-on minimap with fog-of-war is a UI requirement for scope visibility beyond viewport.
 **Rationale**: 32x32 matches PDF spec, Stardew reference, and PixelLab native tile output. 640x360 is the smallest viewport that gives enough on-screen tiles for open-world readability.
 **Consequences**: All asset generation and PixelLab prompts must enforce 32x32. Minimap is a Phase 1+ UI requirement, not optional. `project.godot` updated this session.
-**Testing**: `project.godot` viewport values updated. Will verify visually once first scene is loaded.
 
 ## ADR-010: Dual-Register Terminology System
 **Status**: Accepted
@@ -138,18 +106,41 @@ where every request is decomposed into atomic MCP-executable tasks before execut
 **Rationale**: Color separation is the central aesthetic mechanic. The per-screen budget (3–5 env, 1–2 ui) forces disciplined scenes. PixelLab prompt template in `palette.md` §5 enforces the lock per generation call.
 **Consequences**: Every PixelLab call must include the palette-lock prompt block. Palette values stored in `res://resources/palette.tres` (TBD) so scripts/shaders reference by name, not hex. Adding new colors later requires ADR update + GDD update + palette.md version bump.
 
+## ADR-013: Records Discipline (Three-File System)
+**Status**: Accepted
+**Date**: 2026-04-17
+**Context**: Stale "Pending", "Known Issues", and "Open Questions" sections were accumulating across `notes.md`, `ADR.md`, and Obsidian index files. Resolved items weren't being deleted, creating confusion about what was currently true.
+**Decision**: Strict separation of concerns. `notes.md` = current state (mutable, items deleted when no longer true). `ADR.md` = decisions (immutable; supersede, don't edit). `Sessions/*.md` in the Obsidian vault = behavioral log (append-only). GitHub Issues = open work. Each concern has exactly one home.
+**Rationale**: Mixing current state, history, and open work in the same file forces readers to guess what's still valid. Separating by mutability (immutable decisions, mutable state, append-only log, external issues) eliminates the ambiguity.
+**Consequences**: `ADR.md` loses its "Testing Results", "Known Issues", "Open Questions", and "Future Considerations" sections — that content moves to `notes.md` (if current) or GitHub Issues (if open work). Every session must prune `notes.md` rather than annotate. Changing a decision requires writing a new ADR.
+
+## ADR-014: Secret Scrubbing via git filter-repo Before First Push
+**Status**: Accepted
+**Date**: 2026-04-17
+**Context**: Commit `960fa44` wrote live GitHub PAT and PixelLab API key into `.claude/settings.json` and was baked into local history. First push was imminent; publishing as-is would have leaked both.
+**Decision**: Use `git filter-repo --replace-text` to rewrite history, scrubbing the two secret strings across all commits that contained them. Repo had no remote yet, so destructive SHA rewrites had no downstream cost.
+**Rationale**: `git filter-repo` is the modern, supported tool (filter-branch is deprecated). Surgical string replacement preserves commit structure and messages; only the leaked substrings change to `REDACTED_*` placeholders.
+**Consequences**: Commit SHAs `960fa44`, `b2fcf07`, `8a13c2a` were rewritten to `e843c95`, `9a2642d`, `b1d63ed`. Any future secret exposure before push follows the same protocol. Post-push exposure requires key rotation + `git filter-repo` + `git push --force`, which must be coordinated with all clones.
+
+## Technical Constraints
+- Godot 4.4+ required (Godot MCP Pro hard requirement).
+- Node.js 18+ required (Godot MCP Pro server).
+- Godot editor must be open for any Godot MCP Pro calls.
+- All pixel art: 32x32px tiles, locked palette (ADR-012).
+- Audio: OGG for music, WAV for sfx, -14 LUFS normalized.
+
 ## Key Files
 - `CLAUDE.md` — session instructions (lightweight, points at GDD)
 - `GDD.md` — **canonical design doc** (all game design decisions)
 - `palette.md` — **canonical palette spec** (PixelLab enforcement, awakening-arc reveal rules)
-- `notes.md` — current state, MCP status, credentials
-- `ADR.md` — this file, architectural decisions
-- `document_pdf.pdf` — original design session PDF (reference only)
-- `.claude/settings.json` — legacy project MCP config (INERT — Claude Code reads from ~/.claude.json)
-- `~/.claude.json` — actual MCP server config (user-level)
+- `notes.md` — current state (mutable)
+- `ADR.md` — this file, immutable decisions
+- `.claude/settings.json` — project permissions only (no MCPs, no secrets)
+- `~/.claude.json` — user-level MCP config (outside repo)
 - `.gitattributes` — Git LFS patterns
 - `godot_project/project.godot` — Godot project root
 
 ## Change Log
-- 2026-04-16: Project scaffolded. All dependencies installed except Godot MCP Pro, PixelLab, Suno credentials.
-- 2026-04-17: Session 002. MCP servers migrated to ~/.claude.json (project config was inert). Godot MCP Pro connected live. Drafted GDD v0.1 from design interview. Dystopian reframe (v0.2) — dual-register terminology, Reeducation Facility replaces school, custodians replace parents, minimap-with-fog locked. Palette v1.0 locked (`palette.md`). ADR-008 through ADR-012 added. Viewport updated to 640x360 in `project.godot`. Home68.tscn placeholder removed.
+- 2026-04-16: Project scaffolded. ADR-001 through ADR-007 recorded.
+- 2026-04-17 (Session 002): MCPs migrated to `~/.claude.json` (project config was inert). Godot MCP Pro connected live. GDD v0.1 → v0.2 dystopian reframe. Palette v1.0 locked. ADR-008 through ADR-012 added. Viewport updated to 640×360 in `project.godot`. Home68.tscn placeholder removed.
+- 2026-04-17 (Session 003): First GitHub push to `erikchvac-byte/SSE` (public). Leaked secrets scrubbed from history via `git filter-repo` (ADR-014). `.claude/settings.json` `mcpServers` block removed. GitHub MCP registered in `~/.claude.json`. Records discipline adopted (ADR-013). ADR-004 marked superseded by ADR-012. ADR-005 note appended (MCP Audio Tweaker removed).
