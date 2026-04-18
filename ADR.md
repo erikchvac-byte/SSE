@@ -9,6 +9,28 @@ where every request is decomposed into atomic MCP-executable tasks before execut
 To change a decision, append a new ADR that supersedes the old — do not edit prior entries.
 Current state lives in `notes.md`. Open work lives in GitHub Issues.
 
+## ADR Index
+
+| # | Title | Status |
+|---|---|---|
+| 001 | Godot 4 as Game Engine | Accepted |
+| 002 | Claude Code as Primary Orchestration Agent | Accepted |
+| 003 | Filesystem MCP as Single Write Authority | Accepted |
+| 004 | Shared Project Schema for Asset Consistency | Superseded by 012 |
+| 005 | Audio Pipeline with FFmpeg Fallback | Superseded (see change log 2026-04-17) |
+| 006 | Git LFS for Binary Assets | Accepted |
+| 007 | Tiled Map Editor for Level Layout | Accepted |
+| 008 | GDD.md as Canonical Design Authority | Accepted |
+| 009 | 32x32 Tiles and 640x360 Viewport | Accepted |
+| 010 | Dual-Register Terminology System | Accepted |
+| 011 | Self-Awareness Stat as UI Reveal Mechanic | Accepted |
+| 012 | 10-Color Palette System with Set Separation | Accepted |
+| 013 | Records Discipline (Three-File System) | Accepted |
+| 014 | Secret Scrubbing via git filter-repo Before First Push | Accepted |
+| 015 | Palette Resource Pattern + Phase 1 Asset Organization | Accepted |
+| 016 | Asset Review Gate via `assets/_pending/` Staging | Accepted |
+| 017 | Split Asset Pipeline — Hand-Drawn Tiles, PixelLab for Sprites | Accepted |
+
 ## ADR-001: Godot 4 as Game Engine
 **Status**: Accepted
 **Date**: 2026-04-16
@@ -138,6 +160,27 @@ Current state lives in `notes.md`. Open work lives in GitHub Issues.
 **Rationale**: Token cost of inline image review compounds across a session — a 256×256 sprite is ~90 tokens, a 1024×1024 reference is ~1400, and every image read stays resident until compaction. Defaulting to manual preview keeps the token cost on routine batch members at zero while still letting Claude escalate when its visual judgment adds real value (style drift detection, artifact spotting). The staging folder pattern also means rejected drafts never pollute git history or the `assets/` tree — no need to `git rm` rejects.
 **Consequences**: Every PixelLab call must write to `_pending/` first; Claude cannot skip the staging step even for "obvious" cases. Inline review triggers are subjective — borderline cases default to flagging (false positives are cheap, missed style drift is not). The `!assets/_pending/.gitkeep` negation rule in `.gitignore` is load-bearing; removing it makes fresh clones lack the folder. Flag format is a fixed string so future tooling could grep for it.
 
+## ADR-017: Split Asset Pipeline — Hand-Drawn Tiles, PixelLab for Sprites (Supersedes Implicit "PixelLab for Everything")
+**Status**: Accepted
+**Date**: 2026-04-18
+**Context**: Session 006's first live PixelLab call exposed two misalignments in the implicit "PixelLab for all assets" pipeline. (1) Pixflux produced a composed bedroom scene (tree in corner, table fragment) when asked for a 32×32 floor tile — it is a sprite model, not a texture model, and loaded with scene context it tries to compose rather than tile. (2) Claude confabulated a review of the 32×32 output ("wood slats with pinkish tint") when the actual image was a tree and a table — visual reliability on pixel art breaks below ~64×64. ADR-016's "first-in-series inline review" flag had assumed reliability at asset size. Industry precedent: AAA and indie pixel-art studios hand-draw small tiles; generative AI is used for concept at 256×256+ with humans redrawing at target resolution, not for shipped 32×32 assets. User already owns Aseprite (GDD §11). PixelLab charges per generation against account credits, and each failed 32×32 texture attempt burns credits without producing a usable asset.
+**Decision**: Asset creation splits by tool based on what each does best.
+Tool split:
+- **Hand-drawn in Aseprite** (user): tile textures, repeating patterns, UI chrome, anything needing guaranteed palette compliance and tileability at 32×32.
+- **PixelLab Pixflux** (AI): character sprites, NPC sprites, discrete props (furniture, vehicles, signage). Generated at **64×64 native**. User **hand-redraws the final 32×32 asset in Aseprite** using the 64×64 as reference. GDD §2's 32×32 sprite lock is preserved.
+- **PixelLab Bitforge** (AI): style-transfer / variant work when a reference image exists.
+- **Retire** the implicit "PixelLab → Aseprite cleanup" chain for tiles. Tiles go straight into Aseprite; PixelLab is not in the tile path.
+Review responsibilities:
+- **Visual review is human-only (user).** Claude's inline review from ADR-016 is demoted to *advisory only* for sprites at 64×64+, and *not used at all* for 32×32 assets.
+- Claude's review role is **mechanical**: palette histogram verification (unique-color count vs palette spec), dimension check, filename/path compliance, staging-gate enforcement.
+PixelLab cost discipline:
+- **Hard balance floor: $9.50 USD.** Below $9.50, no PixelLab calls without explicit user approval. No top-up without explicit user approval.
+- Every PixelLab call requires a pre-call cost callout stating current balance and estimated cost.
+- Batch PixelLab calls only AFTER a reference image has been approved by the user. Never generate multiple candidate variants before style lock.
+- Failed generations logged in the session log so burn rate per session is visible.
+**Rationale**: Matching tool to job is industry norm, not a workaround. Pixflux at 32×32 for flat textures fights the tool's design. Aseprite at 32×32 for textures plays to its strengths (palette lock by default, tileable by construction). The 64×64-generate-then-redraw-at-32×32 pattern matches industry precedent (artists routinely work at 2×/4× and scale down). Claude's role shifts from pretending to see pixels it can't see to doing compliance checks it can do reliably. Cost discipline added explicitly now rather than discovered at empty-balance time.
+**Consequences**: GDD §11 "Asset pipeline" line is stale after this ADR and must be updated in the same session. ADR-016 "inline review" flag stays but its semantics narrow: advisory for 64×64+ sprites, not used for 32×32 tiles. A new GitHub issue is required for the Aseprite tile workflow doc (palette import, tile-grid setup, export conventions, sprite downscale-from-64×64 workflow). PixelLab credit burn rate should drop because low-yield 32×32 texture attempts are removed from the pipeline. Session 006's first PixelLab failure is reframed as the signal that informed this ADR, not a bad generation. `palette.tres` (ADR-015) is unchanged; Aseprite imports the same palette via hex values from `palette.md`.
+
 ## Technical Constraints
 - Godot 4.4+ required (Godot MCP Pro hard requirement).
 - Node.js 18+ required (Godot MCP Pro server).
@@ -162,3 +205,4 @@ Current state lives in `notes.md`. Open work lives in GitHub Issues.
 - 2026-04-17 (Session 003): First GitHub push to `erikchvac-byte/SSE` (public). Leaked secrets scrubbed from history via `git filter-repo` (ADR-014). `.claude/settings.json` `mcpServers` block removed. GitHub MCP registered in `~/.claude.json`. Records discipline adopted (ADR-013). ADR-004 marked superseded by ADR-012. ADR-005 note appended (MCP Audio Tweaker removed).
 - 2026-04-17 (Session 004): First code pass. Palette resource + script (ADR-015). Minimap UI skeleton (always-on, fog-of-war, top-right, palette-driven). Bedroom scaffold scene with placeholder rects + player CharacterBody2D + minimap instance wired via moved signal. 4 unique NPCs designed (GDD §9.1.1, v0.2.2). GitHub issues #5/#6/#7/#8 closed. Autonomous-work allowlist expanded in `.claude/settings.local.json` (filesystem MCP + godot-mcp-pro non-runtime ops).
 - 2026-04-18 (Session 005): Asset review workflow defined before first PixelLab batch (Issue #11). ADR-016 — `assets/_pending/` staging folder (gitignored via negation pattern), default manual review, inline-review flag with six trigger conditions. CLAUDE.md "Asset Review Workflow" section added.
+- 2026-04-18 (Session 006): First live PixelLab call revealed Pixflux misalignment at 32×32 (composed a bedroom scene instead of a tileable texture) and Claude's visual-review limit below 64×64 (confabulated a review of the actual image). ADR-017 split the asset pipeline — hand-drawn tiles in Aseprite, PixelLab sprites generated at 64×64 and redrawn at 32×32, Claude's role narrowed to mechanical compliance checks, cost discipline with a $9.50 balance floor. ADR status index table added to top of file for findability (superseded entries stay in place per ADR-013). First `assets/_pending/` image rejected and deleted per ADR-016 gate.
