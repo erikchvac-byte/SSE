@@ -1,11 +1,15 @@
 # SSE Project Instructions — Untitled 90s Suburban Sim
 
-## Session Start — ALWAYS DO THIS FIRST
-Read in order:
+## Session Start
+Always read:
 1. `notes.md` — current state (repo, MCP, env)
-2. `GDD.md` — canonical game design document
-3. `ADR.md` — frozen architectural decisions (skim to orient)
-4. Open GitHub Issues at github.com/erikchvac-byte/SSE/issues — current open work
+2. Open GitHub Issues at github.com/erikchvac-byte/SSE/issues — current open work
+
+Read on-demand (announce which are being skipped, with a one-line reason):
+- `GDD.md` — when the task touches game design
+- `ADR.md` — when the task touches architecture
+
+If scope shifts mid-session to touch design or architecture, read the relevant doc at that point.
 
 ## Project Overview
 2D top-down open-world sim. Ambient dystopia in a fictional 1997 American suburb compound.
