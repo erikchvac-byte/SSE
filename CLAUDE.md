@@ -47,6 +47,19 @@ Human directs → Claude decomposes into atomic MCP tasks → MCPs execute.
 - Audio: music as OGG, sfx as WAV, normalize to -14 LUFS
 - Always-on minimap w/ fog-of-war is a UI requirement (per GDD §10)
 
+## Asset Review Workflow
+- Generated images land in `assets/_pending/` (gitignored). Nothing enters `assets/` or git until approved.
+- Default review mode: **user opens the PNG manually.** Claude states filename, prompt, seed/settings and waits.
+- Claude **must flag for inline review** (and offer to display it via Read) when any of these apply:
+  - First asset in a new series — sets the precedent for batch members
+  - New character, new location, or new stylistic territory (no prior reference in `assets/`)
+  - Palette-sensitive or 90s-aesthetic-critical (hue/saturation could drift)
+  - Silhouette/readability matters at 32×32 (gameplay-visible sprite)
+  - PixelLab output looks off to Claude (artifacts, wrong proportions, prompt bleed)
+  - Deviates visibly from a sibling asset already committed
+- Flag format: `⚠ recommend inline review — reason: <one line>`. User decides yes/no.
+- For routine batch members that match an already-approved reference, skip the flag — user opens manually.
+
 ## Safety Rules
 - NEVER delete or modify files without explicit user permission
 - NEVER push to GitHub without explicit user approval

@@ -14,6 +14,10 @@ godot_project/ios/
 # Exports
 exports/
 
+# Pending asset review staging — nothing here is committed until approved
+assets/_pending/*
+!assets/_pending/.gitkeep
+
 # OS
 .DS_Store
 Thumbs.db

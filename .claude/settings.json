@@ -87,5 +87,18 @@
         "mcp__godot-mcp-pro__set_theme_font_size",
         "mcp__godot-mcp-pro__set_theme_stylebox"
       ]
+    },
+    "hooks": {
+      "SessionEnd": [
+        {
+          "hooks": [
+            {
+              "type": "command",
+              "shell": "bash",
+              "command": "t=$(date +%Y-%m-%d); v=\"/c/Users/erikc/Desktop/DesktopFolder/MeNew/SSE/Sessions\"; ls \"$v\"/\"Session \"*\" - $t.md\" >/dev/null 2>&1 || printf \"{\\\"systemMessage\\\":\\\"WARNING SSE: No Obsidian session log for %s — write %s/Session NNN - %s.md before starting a new session\\\"}\\n\" \"$t\" \"$v\" \"$t\""
+            }
+          ]
+        }
+      ]
     }
   }
