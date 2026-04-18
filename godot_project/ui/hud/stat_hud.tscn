@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://ui/hud/stat_hud.gd" id="1_script"]
+[ext_resource type="Resource" path="res://resources/palette.tres" id="2_palette"]
+
+[node name="StatHUD" type="Control"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -160.0
+offset_right = 196.0
+offset_bottom = -8.0
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("1_script")
+palette = ExtResource("2_palette")
