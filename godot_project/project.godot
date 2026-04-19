@@ -20,6 +20,7 @@ config/icon="res://assets/sprites/ui/icon.png"
 
 PlayerState="*res://autoloads/player_state.gd"
 AwarenessController="*res://autoloads/awareness_controller.gd"
+DialogueSystem="*res://autoloads/dialogue_system.gd"
 MCPScreenshot="*res://addons/godot_mcp/mcp_screenshot_service.gd"
 MCPInputService="*res://addons/godot_mcp/mcp_input_service.gd"
 MCPGameInspector="*res://addons/godot_mcp/mcp_game_inspector_service.gd"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scenes/world/bedroom.gd" id="1_script"]
 [ext_resource type="Resource" path="res://resources/palette.tres" id="2_palette"]
@@ -7,9 +7,13 @@
 [ext_resource type="Script" path="res://ui/awareness/awareness_gated.gd" id="5_gated"]
 [ext_resource type="Script" path="res://ui/awareness/awareness_patch.gd" id="6_patch"]
 [ext_resource type="PackedScene" path="res://ui/hud/stat_hud.tscn" id="7_hud"]
+[ext_resource type="Script" path="res://scenes/world/interactable.gd" id="8_interactable"]
 
 [sub_resource type="TileSet" id="TileSet_bedroom_floor"]
 tile_size = Vector2i(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_desk"]
+size = Vector2(80, 48)
 
 [node name="Bedroom" type="Node2D"]
 script = ExtResource("1_script")
@@ -31,6 +35,15 @@ script = ExtResource("6_patch")
 palette = ExtResource("2_palette")
 color_name = "signal_purple"
 size = Vector2(16, 16)
+
+[node name="DeskNote" type="Area2D" parent="."]
+position = Vector2(320, 80)
+script = ExtResource("8_interactable")
+surface_text = "Kid, don't forget chores. — Mom"
+institutional_text = "Subject: outstanding Assigned Duties pending review. — Maternal Custodian"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeskNote"]
+shape = SubResource("RectangleShape2D_desk")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
