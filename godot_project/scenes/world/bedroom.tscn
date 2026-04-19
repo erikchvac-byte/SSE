@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scenes/world/bedroom.gd" id="1_script"]
 [ext_resource type="Resource" path="res://resources/palette.tres" id="2_palette"]
@@ -8,9 +8,15 @@
 [ext_resource type="Script" path="res://ui/awareness/awareness_patch.gd" id="6_patch"]
 [ext_resource type="PackedScene" path="res://ui/hud/stat_hud.tscn" id="7_hud"]
 
+[sub_resource type="TileSet" id="TileSet_bedroom_floor"]
+tile_size = Vector2i(32, 32)
+
 [node name="Bedroom" type="Node2D"]
 script = ExtResource("1_script")
 palette = ExtResource("2_palette")
+
+[node name="Floor" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_bedroom_floor")
 
 [node name="YouthUnit" parent="." instance=ExtResource("3_player")]
 position = Vector2(192, 160)
