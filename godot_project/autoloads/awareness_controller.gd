@@ -28,6 +28,7 @@ func current_level() -> int:
 
 
 # Debug input — [ decreases, ] increases self_awareness by 25.
+# D fires a multi-stat drift packet to visually verify PlayerState.apply_drift.
 # Remove once a real character-creation / cheat UI exists.
 func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventKey:
@@ -39,6 +40,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		_player_state.stats.adjust_stat("self_awareness", 25)
 	elif key_event.keycode == KEY_BRACKETLEFT:
 		_player_state.stats.adjust_stat("self_awareness", -25)
+	elif key_event.keycode == KEY_D:
+		_player_state.apply_drift(
+			{
+				"authenticity": 5,
+				"social_capital": -3,
+				"self_awareness": 2,
+			},
+			"debug drift test",
+		)
 
 
 func _on_stats_changed(stat_name: String, new_value: int) -> void:
