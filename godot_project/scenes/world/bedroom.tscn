@@ -1,52 +1,67 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene format=4 uid="uid://bs7xlamxijap6"]
 
-[ext_resource type="Script" path="res://scenes/world/bedroom.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cnc75nd7oqie3" path="res://scenes/world/bedroom.gd" id="1_script"]
 [ext_resource type="Resource" path="res://resources/palette.tres" id="2_palette"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://ui/minimap/minimap.tscn" id="4_minimap"]
-[ext_resource type="Script" path="res://ui/awareness/awareness_gated.gd" id="5_gated"]
-[ext_resource type="Script" path="res://ui/awareness/awareness_patch.gd" id="6_patch"]
+[ext_resource type="Script" uid="uid://ccacbsxmwwqb5" path="res://ui/awareness/awareness_gated.gd" id="5_gated"]
+[ext_resource type="Script" uid="uid://cks0uofhkfnew" path="res://ui/awareness/awareness_patch.gd" id="6_patch"]
 [ext_resource type="PackedScene" path="res://ui/hud/stat_hud.tscn" id="7_hud"]
-[ext_resource type="Script" path="res://scenes/world/interactable.gd" id="8_interactable"]
-
-[sub_resource type="TileSet" id="TileSet_bedroom_floor"]
-tile_size = Vector2i(32, 32)
+[ext_resource type="Script" uid="uid://ywd10fvw4hlb" path="res://scenes/world/interactable.gd" id="8_interactable"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_desk"]
 size = Vector2(80, 48)
 
-[node name="Bedroom" type="Node2D"]
+[sub_resource type="TileSet" id="TileSet_wlpbm"]
+
+[node name="Bedroom" type="Node2D" unique_id=1821820784]
 script = ExtResource("1_script")
 palette = ExtResource("2_palette")
 
-[node name="Floor" type="TileMapLayer" parent="."]
-tile_set = SubResource("TileSet_bedroom_floor")
+[node name="YouthUnit" parent="." unique_id=2028779372 instance=ExtResource("3_player")]
+position = Vector2(255, 75)
 
-[node name="YouthUnit" parent="." instance=ExtResource("3_player")]
-position = Vector2(192, 160)
-
-[node name="DoorInsignia" type="Node2D" parent="."]
+[node name="DoorInsignia" type="Node2D" parent="." unique_id=580167398]
 position = Vector2(192, 212)
 script = ExtResource("5_gated")
-min_awareness = 26
 
-[node name="Patch" type="Node2D" parent="DoorInsignia"]
+[node name="Patch" type="Node2D" parent="DoorInsignia" unique_id=567550222]
 script = ExtResource("6_patch")
 palette = ExtResource("2_palette")
-color_name = "signal_purple"
-size = Vector2(16, 16)
 
-[node name="DeskNote" type="Area2D" parent="."]
+[node name="DeskNote" type="Area2D" parent="." unique_id=1389211542]
 position = Vector2(320, 80)
 script = ExtResource("8_interactable")
 surface_text = "Kid, don't forget chores. — Mom"
 institutional_text = "Subject: outstanding Assigned Duties pending review. — Maternal Custodian"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DeskNote"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeskNote" unique_id=260074034]
 shape = SubResource("RectangleShape2D_desk")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1851816937]
 
-[node name="Minimap" parent="UI" instance=ExtResource("4_minimap")]
+[node name="Minimap" parent="UI" unique_id=1987525650 instance=ExtResource("4_minimap")]
+layout_mode = 3
+anchors_preset = 1
+offset_left = -64.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 64.0
+metadata/_edit_use_anchors_ = true
 
-[node name="StatHUD" parent="UI" instance=ExtResource("7_hud")]
+[node name="StatHUD" parent="UI" unique_id=1804817620 instance=ExtResource("7_hud")]
+layout_mode = 3
+anchors_preset = 2
+offset_left = 0.0
+offset_top = -152.0
+offset_right = 188.0
+offset_bottom = 0.0
+metadata/_edit_use_anchors_ = true
+
+[node name="FloorBone2D" type="Bone2D" parent="." unique_id=1408304590]
+position = Vector2(-9, 3)
+
+[node name="Floor" type="TileMapLayer" parent="." unique_id=635282790]
+position = Vector2(0, 3)
+tile_map_data = PackedByteArray("AAABAAEAAAAAAAAAAGABAAIAAQAAAAAAAGABAAMAAQAAAAAAAGABAAQAAQAAAAAAAGABAAUAAQAAAAAAAGABAAYAAAAAAAAAADACAAEAAQAAAAAAAAACAAIAAwAAAAAAAAACAAMAAwAAAAAAAAACAAQAAwAAAAAAAAACAAUAAwAAAAAAAAACAAYAAQAAAAAAADADAAEAAQAAAAAAAAADAAIAAwAAAAAAAAADAAMAAwAAAAAAAAADAAQAAwAAAAAAAAADAAUAAwAAAAAAAAADAAYAAQAAAAAAADAEAAEAAQAAAAAAAAAEAAIAAwAAAAAAAAAEAAMAAwAAAAAAAAAEAAQAAwAAAAAAAAAEAAUAAwAAAAAAAAAEAAYAAQAAAAAAADAFAAEAAQAAAAAAAAAFAAIAAwAAAAAAAAAFAAMAAwAAAAAAAAAFAAQAAwAAAAAAAAAFAAUAAwAAAAAAAAAFAAYAAQAAAAAAADAGAAEAAQAAAAAAAAAGAAIAAwAAAAAAAAAGAAMAAwAAAAAAAAAGAAQAAgAAAAAAAAAGAAUAAwAAAAAAAAAGAAYAAQAAAAAAADAHAAEAAQAAAAAAAAAHAAIAAwAAAAAAAAAHAAMAAwAAAAAAAAAHAAQAAwAAAAAAAAAHAAUAAwAAAAAAAAAHAAYAAQAAAAAAADAIAAEAAQAAAAAAAAAIAAIAAwAAAAAAAAAIAAMAAwAAAAAAAAAIAAQAAwAAAAAAAAAIAAUAAwAAAAAAAAAIAAYAAQAAAAAAADAJAAEAAQAAAAAAAAAJAAIAAwAAAAAAAAAJAAMAAwAAAAAAAAAJAAQAAwAAAAAAAAAJAAUAAwAAAAAAAAAJAAYAAQAAAAAAADAKAAEAAAAAAAAAAAAKAAIAAQAAAAAAAFAKAAMAAQAAAAAAAFAKAAQAAQAAAAAAAFAKAAUAAQAAAAAAAFAKAAYAAAAAAAAAAFA=")
+tile_set = SubResource("TileSet_wlpbm")

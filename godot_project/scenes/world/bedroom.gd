@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 
 # Phase 1 bedroom scaffold. Placeholder rects painted from palette.tres —

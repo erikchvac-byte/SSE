@@ -1,13 +1,13 @@
 # Palette Spec — Untitled 90s Suburban Sim
 
-**Version**: 1.0 — locked 2026-04-17
-**Philosophy**: Hyperreal-uncanny 1997 suburb + institutional 1997 computer UI. Hard separation between world-facing and system-facing color sets. The separation itself is the game's core visual mechanic.
+**Version**: 1.1 — extensible (per ADR-018, 2026-04-19)
+**Philosophy**: Hyperreal-uncanny 1997 suburb + institutional 1997 computer UI. Hard separation between world-facing and system-facing color sets. The separation itself is the game's core visual mechanic. The **core 10 colors** below are canonical and govern PixelLab generation and the awakening-arc reveal mechanic. Extended color sets (§2 onwards) are back-registered from hand-drawn tile work and are not constrained by ENV/UI/BRIDGE rules.
 
 Canonical. `GDD.md` §2 references this file. All PixelLab prompts must enforce it.
 
 ---
 
-## 1. Color Sets
+## 1. Core Color Sets (canonical — PixelLab enforcement + awakening arc)
 
 ### ENVIRONMENT (5 colors, world-facing)
 
@@ -41,7 +41,52 @@ Canonical. `GDD.md` §2 references this file. All PixelLab prompts must enforce 
 
 ---
 
-## 2. Rules
+---
+
+## 2. Extended Color Sets
+
+Extended sets are registered from hand-drawn tile assets. They are not governed by the ENV/UI/BRIDGE rules and are not injected into PixelLab prompts. Colors added as more tile work is done — each extension gets an origin note and a palette.md version bump.
+
+### INTERIOR BEDROOM SET (31 colors — v1.1, 2026-04-19)
+Source: `InteriorTilesLITE_edited-export.png`. 80 raw colors collapsed to 31 by snapping ±2-channel noise clusters to their most-used representative.
+
+| Hex | Name | Family |
+|---|---|---|
+| `#452E40` | int_mauve_01 | mauve |
+| `#4D2B44` | int_mauve_02 | mauve |
+| `#5C454F` | int_mauve_03 | mauve |
+| `#693947` | int_mauve_04 | mauve |
+| `#7A3B4E` | int_warm_01 | warm |
+| `#7B6268` | int_warm_02 | warm |
+| `#8F5152` | int_warm_03 | warm |
+| `#A84B55` | int_warm_04 | warm |
+| `#AB597D` | int_warm_05 | warm |
+| `#9C807D` | int_warm_06 | warm |
+| `#B77E6B` | int_warm_07 | warm |
+| `#D8715E` | int_warm_08 | warm |
+| `#C47F78` | int_warm_09 | warm |
+| `#D3A083` | int_warm_10 | warm |
+| `#C3A79C` | int_warm_11 | warm |
+| `#F09F70` | int_warm_12 | warm |
+| `#EBC8A8` | int_warm_13 | warm |
+| `#F7CF91` | int_rose_01 | rose-light |
+| `#DBC9B3` | int_rose_02 | rose-light |
+| `#FCECD2` | int_rose_03 | rose-light |
+| `#64B082` | int_green_01 | green |
+| `#AAD796` | int_green_02 | green |
+| `#A0DED3` | int_green_03 | green |
+| `#488985` | int_teal_01 | teal |
+| `#6FB0B6` | int_teal_02 | teal |
+| `#3E3B66` | int_blue_01 | blue |
+| `#3F5B73` | int_blue_02 | blue |
+| `#4A5686` | int_blue_03 | blue |
+| `#577E9D` | int_blue_04 | blue |
+| `#2C1E2F` | int_purple_01 | purple |
+| `#392944` | int_purple_02 | purple |
+
+---
+
+## 3. Rules
 
 1. **Environment uses only ENVIRONMENT colors** (plus BRIDGE and GLOBAL BASE).
 2. **UI uses only UI colors** (plus BRIDGE and GLOBAL BASE).
@@ -56,7 +101,7 @@ Canonical. `GDD.md` §2 references this file. All PixelLab prompts must enforce 
 
 ---
 
-## 3. Awakening Arc — Color as Wake-Up Meter
+## 4. Awakening Arc — Color as Wake-Up Meter
 
 Per GDD §5.2 and §6, the `self_awareness` stat controls how much of the institutional layer is visible. Palette implementation:
 
@@ -71,7 +116,7 @@ This is the single most important rule in the spec: **raising self-awareness = m
 
 ---
 
-## 4. Skin / Character Notes
+## 5. Skin / Character Notes
 
 Characters are environment sprites. Skin tones use:
 - Warm mid-tone: `#A87E4D`
@@ -82,7 +127,7 @@ Range is intentionally narrow to keep character sprites cohesive with world spri
 
 ---
 
-## 5. PixelLab Prompt Template
+## 6. PixelLab Prompt Template
 
 Every PixelLab call must include this enforcement block in the prompt:
 
@@ -117,7 +162,7 @@ No anti-aliasing. 1997 institutional graphic design.
 
 ---
 
-## 6. Godot Implementation Notes
+## 7. Godot Implementation Notes
 
 - Store the 10 colors in a Godot resource (e.g., `res://resources/palette.tres`) as named `Color` exports so scripts and shaders can reference by name, not hex.
 - Minimap, HUD, and any programmatic color use must pull from this resource. Never hard-code hex in script.
@@ -125,6 +170,7 @@ No anti-aliasing. 1997 institutional graphic design.
 
 ---
 
-## 7. Change Log
+## 8. Change Log
 
 - **2026-04-17 — v1.0**: Locked from design session. User proposed original 10-color system with env/ui/bridge/base rules; hex values retuned for hyperreal-uncanny feel (env) + 1997-computer feel with one "glitch" color (ui). BRIDGE `#6A00FF` and GLOBAL BASE `#0B0B0F` preserved from original proposal.
+- **2026-04-19 — v1.1**: Palette becomes extensible (ADR-018 supersedes ADR-012). Core 10 colors and all their rules unchanged. Interior bedroom set (31 colors) back-registered from hand-drawn tileset `InteriorTilesLITE_edited-export.png`. 80 raw colors collapsed to 31 by snapping ±2-channel noise clusters to most-used representative.
